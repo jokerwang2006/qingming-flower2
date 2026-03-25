@@ -7,88 +7,116 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-background:#f7f7f7;
-font-family:Arial,sans-serif;
-text-align:center;
-padding:30px 15px;
+  background:#f7f7f7;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  padding:30px 15px;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .card{
-background:white;
-padding:30px 20px;
-border-radius:20px;
-max-width:400px;
-margin:0 auto;
-box-shadow:0 0 15px #00000010
+  background:white;
+  padding:30px 20px;
+  border-radius:20px;
+  max-width:400px;
+  margin:0 auto;
+  box-shadow:0 0 15px #00000010;
 }
 h1{
-font-size:22px;
-margin-bottom:10px;
-color:#333
+  font-size:22px;
+  margin-bottom:10px;
+  color:#333
 }
 .text{
-color:#666;
-margin-bottom:25px
+  color:#666;
+  margin-bottom:25px
 }
 .flower{
-font-size:70px;
-margin:20px 0;
-cursor:pointer
+  font-size:70px;
+  margin:20px 0;
+  cursor:pointer;
+  transition: transform 0.2;
+}
+.flower:active{
+  transform: scale(0.95);
 }
 #count{
-font-size:18px;
-color:#c0392b;
-margin:20px 0
+  font-size:18px;
+  color:#c0392b;
+  margin:20px 0
 }
 button{
-background:#27ae60;
-color:white;
-border:none;
-padding:12px 30px;
-border-radius:10px;
-font-size:16px;
-cursor:pointer;
-width:80%
+  background:#27ae60;
+  color:white;
+  border:none;
+  padding:12px 30px;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  width:80%;
+  transition: background 0.2;
+}
+button:active{
+  background:#219653;
 }
 </style>
 </head>
-
 <body>
 <div class="card">
-<h1>清明寄思 · 云端献花</h1>
-<p class="text">缅怀先烈，文明祭扫</p>
-
-<div class="flower" onclick="add()">🌸</div>
-<p>点击鲜花献花</p>
-
-<div id="count">正在获取献花数...</div>
-<button onclick="add()">我也献花</button>
+  <h1>清明寄思 · 云端献花</h1>
+  <p class="text">缅怀先烈，文明祭扫</p>
+  <div class="flower" onclick="add()">🌸</div>
+  <p>点击鲜花献花</p>
+  <div id="count">正在获取献花数...</div>
+  <button onclick="add()">我也献花</button>
 </div>
 
 <script>
-// 后端接口（我给你提供公共免费接口，所有人共用）
-const API = "https://api.kvdb.io/keys/qingming-flower-2025";
+// 这里用你自己的 Gist ID，我先给你一个演示用的
+const GIST_ID = "你的GistID";
+const FILE_NAME = "count.json";
 
-// 页面打开时自动获取最新数量
+// 获取计数
 async function getCount() {
-  let res = await fetch(API);
-  let data = await res.json();
-  let num = data.value || 0;
-  document.getElementById("count").innerText = `已有 ${num} 人献花`;
+  try {
+    let res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+    let data = await res.json();
+    let count = JSON.parse(data.files[FILE_NAME].content).count || 0;
+    document.getElementById("count").textContent = `已有 ${count} 人献花`;
+    return count;
+  } catch (e) {
+    document.getElementById("count").textContent = "已有 0 人献花";
+    return 0;
+  }
 }
 
-// 点击献花 +1
+// 增加计数
 async function add() {
-  let res = await fetch(API);
-  let data = await res.json();
-  let newCount = (data.value || 0) + 1;
-
-  await fetch(API, {
-    method: "PUT",
-    body: newCount
-  });
-
-  getCount();
-  alert("献花成功！");
+  let count = await getCount();
+  let newCount = count + 1;
+  
+  try {
+    await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      method: "PATCH",
+      headers: {
+        "Authorization": "token YOUR_GITHUB_TOKEN",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        files: {
+          [FILE_NAME]: {
+            content: JSON.stringify({ count: newCount })
+          }
+        }
+      })
+    });
+    getCount();
+    alert("献花成功！");
+  } catch (e) {
+    alert("献花失败，请稍后再试");
+  }
 }
 
 // 初始化
