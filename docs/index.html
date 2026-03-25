@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>qingm</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <h1>👋 Hello World!</h1><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>清明·云端献花</title>
+<style>
+body{text-align:center;background:#f2f2f2;font-family:"微软雅黑";padding:40px 20px;}
+.box{max-width:600px;margin:0 auto;background:#fff;padding:40px;border-radius:16px;box-shadow:0 0 15px rgba(0,0,0,0.1);}
+h1{font-size:24px;color:#333;margin-bottom:10px;}
+.sub{color:#666;margin-bottom:30px;}
+.flower{font-size:70px;cursor:pointer;transition:.3s;}
+.flower:hover{transform:scale(1.1);}
+.count{font-size:18px;color:#c0392b;margin:20px 0;}
+.btn{padding:12px 30px;background:#27ae60;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
+.btn:hover{background:#219653;}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>清明寄思 · 云端献花</h1>
+<p class="sub">缅怀先烈 · 文明祭扫 · 绿色清明</p >
+<div class="flower" onclick="add()">🌸</div>
+<p>点击鲜花，献上缅怀</p >
+<div class="count">已有 <span id="num">0</span> 位同学献花</div>
+<button class="btn" onclick="add()">我要献花</button>
+</div>
+<script>
+let n=0;
+function add(){
+n++;
+document.getElementById("num").innerText=n;
+alert("献花成功！缅怀先烈，传承精神。");
+}
+</script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
