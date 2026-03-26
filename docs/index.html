@@ -1,123 +1,84 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>清明献花</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:#f7f7f7;
-  font-family:Arial,sans-serif;
-  text-align:center;
-  padding:30px 15px;
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.card{
-  background:white;
-  padding:30px 20px;
-  border-radius:20px;
-  max-width:400px;
-  margin:0 auto;
-  box-shadow:0 0 15px #00000010;
-}
-h1{
-  font-size:22px;
-  margin-bottom:10px;
-  color:#333
-}
-.text{
-  color:#666;
-  margin-bottom:25px
-}
-.flower{
-  font-size:70px;
-  margin:20px 0;
-  cursor:pointer;
-  transition: transform 0.2s;
-}
-.flower:active{
-  transform: scale(0.95);
-}
-#count{
-  font-size:18px;
-  color:#c0392b;
-  margin:20px 0
-}
-button{
-  background:#27ae60;
-  color:white;
-  border:none;
-  padding:12px 30px;
-  border-radius:10px;
-  font-size:16px;
-  cursor:pointer;
-  width:80%;
-  transition: background 0.2s;
-}
-button:active{
-  background:#219653;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>清明献花</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .flower-box {
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        /* 未献花样式 */
+        #flowerBtn {
+            padding: 12px 30px;
+            font-size: 18px;
+            background-color: #e63946;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3;
+        }
+
+        #flowerBtn:hover:not(.disabled) {
+            background-color: #c1121f;
+        }
+
+        /* 已献花样式 */
+        #flowerBtn.disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-<div class="card">
-  <h1>清明寄思 · 云端献花</h1>
-  <p class="text">缅怀先烈，文明祭扫</p>
-  <div class="flower" onclick="addFlower()">🌸</div>
-  <p>点击鲜花献花</p>
-  <div id="count">正在获取献花数...</div>
-  <button onclick="addFlower()">我也献花</button>
-</div>
+    <h2>清明追思 · 致敬先烈与故人</h2>
+    <div class="flower-box">
+        <button id="flowerBtn">点击献花</button>
+    </div>
 
-<script>
-const ISSUE_NUMBER = 1; // 改成你的 Issue 编号
-const REPO = "jokerwang2006/qingming-flower";
+    <script>
+        // 获取按钮元素
+        const btn = document.getElementById('flowerBtn');
 
-// 获取当前献花数
-async function getCount() {
-  try {
-    const res = await fetch(`https://api.github.com/repos/${REPO}/issues/${ISSUE_NUMBER}/comments`);
-    const comments = await res.json();
-    if (comments.length === 0) return 0;
-    return parseInt(comments[0].body) || 0;
-  } catch (e) {
-    return 0;
-  }
-}
+        // 一打开页面就检查是否已经献过花
+        window.onload = function() {
+            if(localStorage.getItem('hasFlower') === 'true') {
+                setFlowered();
+            }
+        };
 
-// 点击献花
-async function addFlower() {
-  let count = await getCount();
-  count++;
-  
-  try {
-    // 调用 GitHub Actions 更新计数
-    await fetch(`https://api.github.com/repos/${REPO}/dispatches`, {
-      method: "POST",
-      headers: {
-        "Authorization": "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", // 替换成你的 Token
-        "Accept": "application/vnd.github.v3+json"
-      },
-      body: JSON.stringify({
-        event_type: "add-flower",
-        client_payload: { count: count }
-      })
-    });
-    document.getElementById("count").innerText = `已有 ${count} 人献花`;
-    alert("献花成功！");
-  } catch (e) {
-    alert("献花失败，请稍后再试");
-  }
-}
+        // 点击献花
+        btn.onclick = function() {
+            // 如果已经献过，直接返回，不执行
+            if(localStorage.getItem('hasFlower') === 'true') {
+                return;
+            }
 
-// 初始化显示
-getCount().then(count => {
-  document.getElementById("count").innerText = `已有 ${count} 人献花`;
-});
-</script>
+            // 标记为已献花
+            localStorage.setItem('hasFlower', 'true');
+            setFlowered();
+        };
+
+        // 设置按钮为“已献花”状态
+        function setFlowered() {
+            btn.innerText = '已献花';
+            btn.classList.add('disabled');
+        }
+    </script>
 </body>
 </html>
