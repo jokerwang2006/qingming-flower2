@@ -42,6 +42,7 @@
             margin-bottom: 80px;
         }
 
+        /* 樱花图标永久显示 */
         .flower-icon {
             width: 120px;
             height: 120px;
@@ -78,6 +79,7 @@
     <div class="card">
         <div class="title">清明寄思·云端献花</div>
         <div class="subtitle">缅怀先烈，文明祭扫</div>
+        <!-- 樱花图标固定放在这里，永远不会消失 -->
         <div class="flower-icon"></div>
         <div class="tip" id="tipText">点击鲜花献花</div>
         <button class="flower-btn" id="flowerBtn">我也献花</button>
@@ -97,12 +99,11 @@
         // 点击献花
         btn.onclick = function() {
             if (localStorage.getItem('hasFlowered') === 'true') return;
-
             localStorage.setItem('hasFlowered', 'true');
             setFlowered();
         };
 
-        // 设置为已献花状态
+        // 设置为已献花状态（只改文字和按钮，不删樱花）
         function setFlowered() {
             tipText.textContent = '已献花';
             btn.textContent = '已献花';
