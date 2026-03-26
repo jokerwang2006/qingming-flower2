@@ -2,111 +2,90 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>清明寄思·云端献花</title>
+    <title>清明献花</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
-
         body {
-            background-color: #f7f7f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .card {
-            background: white;
-            width: 360px;
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
+            background: #f7f7f7;
+            padding: 50px 0;
+            font-family: "Microsoft YaHei";
         }
-
+        .box {
+            background: white;
+            width: 340px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
         .title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #222;
-            margin-bottom: 16px;
+            font-size: 26px;
+            margin-bottom: 10px;
         }
-
-        .subtitle {
-            font-size: 18px;
+        .desc {
+            font-size: 16px;
             color: #666;
-            margin-bottom: 80px;
+            margin-bottom: 40px;
         }
-
-        /* 樱花图标永久显示 */
-        .flower-icon {
+        /* 花朵永久显示 */
+        .flower {
             width: 120px;
             height: 120px;
             margin: 0 auto 30px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 20 C60 10 80 20 85 40 C90 60 75 80 50 85 C25 80 10 60 15 40 C20 20 40 10 50 20 Z" fill="#ff6b8b"/><path d="M50 25 C58 15 75 22 80 40 C85 58 72 75 50 80 C28 75 15 58 20 40 C25 22 42 15 50 25 Z" fill="#ff8fa3"/><circle cx="50" cy="50" r="8" fill="#e8d5ff"/><circle cx="42" cy="42" r="3" fill="#e8d5ff"/><circle cx="58" cy="42" r="3" fill="#e8d5ff"/><circle cx="42" cy="58" r="3" fill="#e8d5ff"/><circle cx="58" cy="58" r="3" fill="#e8d5ff"/></svg>') no-repeat center;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 15 L55 35 L75 40 L58 55 L65 75 L50 65 L35 75 L42 55 L25 40 L45 35 Z" fill="pink"/></svg>');
             background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
-
-        .tip {
+        #text {
             font-size: 22px;
-            color: #222;
             margin-bottom: 20px;
         }
-
-        .flower-btn {
-            width: 100%;
-            padding: 14px;
-            font-size: 20px;
+        #btn {
+            width: 80%;
+            padding: 12px;
+            font-size: 18px;
+            background: #2ecc71;
             color: white;
-            background-color: #2ecc71;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: 0.3;
         }
-
-        .flower-btn.disabled {
-            background-color: #95a5a6;
+        #btn.disabled {
+            background: #999;
             cursor: not-allowed;
         }
     </style>
 </head>
 <body>
-    <div class="card">
+    <div class="box">
         <div class="title">清明寄思·云端献花</div>
-        <div class="subtitle">缅怀先烈，文明祭扫</div>
-        <!-- 樱花图标固定放在这里，永远不会消失 -->
-        <div class="flower-icon"></div>
-        <div class="tip" id="tipText">点击鲜花献花</div>
-        <button class="flower-btn" id="flowerBtn">我也献花</button>
+        <div class="desc">缅怀先烈 文明祭扫</div>
+        <div class="flower"></div>
+        <div id="text">点击献花</div>
+        <button id="btn">献花</button>
     </div>
 
     <script>
-        const btn = document.getElementById('flowerBtn');
-        const tipText = document.getElementById('tipText');
+        let btn = document.getElementById('btn');
+        let text = document.getElementById('text');
 
-        // 页面加载时检查是否已献花
-        window.onload = function() {
-            if (localStorage.getItem('hasFlowered') === 'true') {
-                setFlowered();
-            }
-        };
+        // 打开页面就检查是否献过花
+        if(localStorage.getItem('done') === '1'){
+            showDone();
+        }
 
-        // 点击献花
-        btn.onclick = function() {
-            if (localStorage.getItem('hasFlowered') === 'true') return;
-            localStorage.setItem('hasFlowered', 'true');
-            setFlowered();
-        };
+        // 点击事件
+        btn.onclick = function(){
+            if(localStorage.getItem('done') === '1') return;
+            localStorage.setItem('done', '1');
+            showDone();
+        }
 
-        // 设置为已献花状态（只改文字和按钮，不删樱花）
-        function setFlowered() {
-            tipText.textContent = '已献花';
-            btn.textContent = '已献花';
+        // 显示已献花状态
+        function showDone(){
+            text.innerText = '已献花';
+            btn.innerText = '已献花';
             btn.classList.add('disabled');
         }
     </script>
