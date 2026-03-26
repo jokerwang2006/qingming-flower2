@@ -2,6 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<!-- 只加了这一行 手机适配 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>清明·云端献花</title>
 <style>
 body{text-align:center;background:#f2f2f2;font-family:"微软雅黑";padding:40px 20px;}
@@ -12,7 +14,6 @@ h1{font-size:24px;color:#333;margin-bottom:10px;}
 .flower:hover{transform:scale(1.1);}
 .btn{padding:12px 30px;background:#27ae60;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
 .btn:hover{background:#219653;}
-/* 已献花按钮变灰 */
 .btn.done{background:#999;cursor:not-allowed;}
 </style>
 </head>
@@ -25,7 +26,6 @@ h1{font-size:24px;color:#333;margin-bottom:10px;}
 <button class="btn" id="flowerBtn" onclick="add()">我要献花</button>
 </div>
 <script>
-// 页面加载时检查是否已经献过花
 window.onload = function(){
     if(localStorage.getItem('hasFlower') === '1'){
         showDone();
@@ -33,18 +33,14 @@ window.onload = function(){
 }
 
 function add(){
-    // 如果已经献过，直接退出
     if(localStorage.getItem('hasFlower') === '1'){
         return;
     }
-    
-    // 标记已献花
     localStorage.setItem('hasFlower', '1');
     showDone();
     alert("献花成功！缅怀先烈，传承精神。");
 }
 
-// 显示已献花状态
 function showDone(){
     document.getElementById("tip").innerText = "已献花";
     let btn = document.getElementById("flowerBtn");
