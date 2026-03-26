@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>清明献花</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清明寄思·云端献花</title>
     <style>
         * {
             margin: 0;
@@ -12,71 +13,99 @@
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            width: 360px;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
-            padding-top: 100px;
         }
 
-        .flower-box {
-            display: inline-block;
-            margin-top: 30px;
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 16px;
         }
 
-        /* 未献花样式 */
-        #flowerBtn {
-            padding: 12px 30px;
+        .subtitle {
             font-size: 18px;
-            background-color: #e63946;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .flower-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 20 C60 10 80 20 85 40 C90 60 75 80 50 85 C25 80 10 60 15 40 C20 20 40 10 50 20 Z" fill="#ff6b8b"/><path d="M50 25 C58 15 75 22 80 40 C85 58 72 75 50 80 C28 75 15 58 20 40 C25 22 42 15 50 25 Z" fill="#ff8fa3"/><circle cx="50" cy="50" r="8" fill="#e8d5ff"/><circle cx="42" cy="42" r="3" fill="#e8d5ff"/><circle cx="58" cy="42" r="3" fill="#e8d5ff"/><circle cx="42" cy="58" r="3" fill="#e8d5ff"/><circle cx="58" cy="58" r="3" fill="#e8d5ff"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+
+        .tip {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 30px;
+        }
+
+        .flower-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 20px;
             color: white;
+            background-color: #2ecc71;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
             transition: 0.3;
         }
 
-        #flowerBtn:hover:not(.disabled) {
-            background-color: #c1121f;
-        }
-
-        /* 已献花样式 */
-        #flowerBtn.disabled {
-            background-color: #999;
+        .flower-btn.disabled {
+            background-color: #95a5a6;
             cursor: not-allowed;
         }
     </style>
 </head>
 <body>
-    <h2>清明追思 · 致敬先烈与故人</h2>
-    <div class="flower-box">
-        <button id="flowerBtn">点击献花</button>
+    <div class="card">
+        <div class="title">清明寄思·云端献花</div>
+        <div class="subtitle">缅怀先烈，文明祭扫</div>
+        <div class="flower-icon"></div>
+        <div class="tip" id="tipText">点击鲜花献花</div>
+        <button class="flower-btn" id="flowerBtn">我也献花</button>
     </div>
 
     <script>
-        // 获取按钮元素
         const btn = document.getElementById('flowerBtn');
+        const tipText = document.getElementById('tipText');
 
-        // 一打开页面就检查是否已经献过花
+        // 页面加载时检查是否已献花
         window.onload = function() {
-            if(localStorage.getItem('hasFlower') === 'true') {
+            if (localStorage.getItem('hasFlowered') === 'true') {
                 setFlowered();
             }
         };
 
         // 点击献花
         btn.onclick = function() {
-            // 如果已经献过，直接返回，不执行
-            if(localStorage.getItem('hasFlower') === 'true') {
-                return;
-            }
+            if (localStorage.getItem('hasFlowered') === 'true') return;
 
-            // 标记为已献花
-            localStorage.setItem('hasFlower', 'true');
+            localStorage.setItem('hasFlowered', 'true');
             setFlowered();
         };
 
-        // 设置按钮为“已献花”状态
+        // 设置为已献花状态
         function setFlowered() {
-            btn.innerText = '已献花';
+            tipText.textContent = '已献花';
+            btn.textContent = '已献花';
             btn.classList.add('disabled');
         }
     </script>
